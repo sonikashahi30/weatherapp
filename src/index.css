@@ -90,9 +90,15 @@
 .humidity, .wind {
   font-size: 20px;
   padding-left: 1rem;
-  
+
 }
 
 .humidity p, .wind p{
   margin: 0px;
+}
+
+.error{
+  color: red;
+  text-align: left;
+  margin-right: 10px;
 }

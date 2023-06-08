@@ -4,6 +4,7 @@ import axios from "axios";
 import windImg from "./wind.png";
 
 
+
 function Home(){
  const [data, setData] = useState({
     celcius: 10,
@@ -13,6 +14,7 @@ function Home(){
 
  })
  const [name, setName] = useState('');
+ const [error, setError] = useState('');
 
  const handleClick = () => {
     if (name !== "  ")
@@ -23,17 +25,32 @@ const apiurl = `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=
         setData({...data, celcius: res.data.main.temp, name: res.data.name,
         humidity: res.data.main.humidity, speed: res.data.wind.speed })
     })
-    .catch( err => console.log(err));
+   .catch(err => {
+    if(err.response.status == 404) {
+        setError("Invalid City Name")
+    }else {
+        setError('');
+    }
+    console.log(err)
+});
+   }
+}
 
-}    
- }
+const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleClick();
+    }
+  };
     return (
         <div className='container'>
         <div className= "weather">
           <div className="search">
-            <input type='text' placeholder='Enter City Name' onChange={e => setName(e.target.value)}/>
-            <button> <img src='search.jpg' onClick={handleClick} alt=''/></button>
+            <input type='text' placeholder='Enter City Name' onChange={e => setName(e.target.value)} onKeyDown={handleKeyPress}   />
+            <button> <img src='search.jpg' onClick={handleClick}   alt=''/></button>
             </div>  
+            <div className='error'>
+                <p>{error}</p>
+            </div>
             <div className='winfo'>
                 <img src='clouds.png' alt='' />
                 <h1>{Math.round(data.celcius)}°C</h1>
